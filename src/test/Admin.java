@@ -3,7 +3,7 @@ public class Admin extends User {
 
     private String AdminName;
     Admin(String _emailAddress, String _firstName, String _lastName, String _city,
-          String _street, String _houseNumber, String _postalCode, String _phoneNumber, String _title, String _password){
+          String _street, String _houseNumber, String _postalCode, String _phoneNumber, String _title, String _password, LatLong _geolocation){
         setEmailAddress(_emailAddress);
         setFirstName(_firstName);
         setLastName(_lastName);
@@ -14,6 +14,7 @@ public class Admin extends User {
         setPhoneNUmber(_phoneNumber);
         setTitle(_title);
         setPasswordhash(_password);
+        setGeolocation(_geolocation);
     }
 
     public void createPatientAccount(){}

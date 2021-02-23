@@ -31,7 +31,7 @@ public class Patient extends User {
     }
     Patient(String _emailAddress, String _firstName, String _lastName, String _city,
             String _street, String _houseNumber, String _postalCode, String _phoneNumber, String _title, String _password,
-            String _birthday, String _insuranceName, Symptom[] _healthinformation, Medication[] _medications, int _weight) {
+            String _birthday, String _insuranceName, Symptom[] _healthinformation, Medication[] _medications, int _weight, LatLong _geolocation) {
         setEmailAddress(_emailAddress);
         setFirstName(_firstName);
         setLastName(_lastName);
@@ -47,6 +47,7 @@ public class Patient extends User {
         setSymptoms(_healthinformation);
         setMedications(_medications);
         setWeight(_weight);
+        setGeolocation(_geolocation);
     }
 
 
