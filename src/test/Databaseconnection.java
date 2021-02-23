@@ -803,6 +803,7 @@ public class Databaseconnection {
                 buildTagTable();
                 buildRatingTagTable();
                 buildTransferOrderTable();
+                buildSymptomSpecializationTable();
 
                 System.out.println("Database build. \n\n\n");
 
@@ -1205,8 +1206,40 @@ public class Databaseconnection {
                 preparedStatement.setString(1, "Diarrhea");
                 preparedStatement.setString(2, "Immune Reaction to foreign particles within the respiratory System.");
                 preparedStatement.execute();
-
-
+                preparedStatement.setString(1, "Depression");
+                preparedStatement.setString(2, "Depression is a state of low mood and aversion to activity. It can affect a person's thoughts, behavior, motivation, feelings, and sense of well-being.");
+                preparedStatement.execute();
+                preparedStatement.setString(1, "Vertigo");
+                preparedStatement.setString(2, "Vertigo is a condition where a person has the sensation of moving or of surrounding objects moving when they are not.");
+                preparedStatement.execute();
+                preparedStatement.setString(1, "Visual impairment");
+                preparedStatement.setString(2, "Visual sight is decreased. e.g. double Vision.");
+                preparedStatement.execute();
+                preparedStatement.setString(1, "Cardiac arrhythmias");
+                preparedStatement.setString(2, "Arrhythmia, also known as cardiac arrhythmia or heart arrhythmia, is a group of conditions in which the heartbeat is irregular, too fast, or too slow.");
+                preparedStatement.execute();
+                preparedStatement.setString(1, "Swelling");
+                preparedStatement.setString(2, "Edema, also known as fluid retention, dropsy, hydropsy or swelling, is the buildup of fluid in the body's tissue.");
+                preparedStatement.execute();
+                preparedStatement.setString(1, "Tinnitus");
+                preparedStatement.setString(2, "Tinnitus is the perception of sound when no corresponding external sound is present.");
+                preparedStatement.execute();
+                preparedStatement.setString(1, "Hallucination");
+                preparedStatement.setString(2, "A hallucination is a perception in the absence of external stimulus that has qualities of real perceptions.");
+                preparedStatement.execute();
+                preparedStatement.setString(1, "Abnormal vaginal bleeding");
+                preparedStatement.setString(2, "Vaginal bleeding is any bleeding from the vagina.");
+                preparedStatement.execute();
+                preparedStatement.setString(1, "Anxiety");
+                preparedStatement.setString(2, "Anxiety is an emotion characterized by an unpleasant state of inner turmoil, often accompanied by nervous behavior such as pacing back and forth, somatic complaints, and rumination.");
+                preparedStatement.execute();
+                preparedStatement.setString(1, "Phobia");
+                preparedStatement.setString(2, "A phobia is a type of anxiety disorder defined by a persistent and excessive fear of an object or situation.");
+                preparedStatement.execute();
+                preparedStatement.setString(1, "Dysuria");
+                preparedStatement.setString(2, "Dysuria refers to difficult urination. Painful urination is also sometimes, but rarely, described as dysuria.");
+                preparedStatement.execute();
+                
                 System.out.println("complete.");
 
             }
@@ -1486,6 +1519,73 @@ public class Databaseconnection {
                     " )");
 
             System.out.println("complete.");
+        }
+        
+        private void buildSymptomSpecializationTable() throws SQLException{
+          System.out.println("Building SymptomSpecializationTable table...");
+
+            Statement state = connection.createStatement();
+            state.execute( "CREATE TABLE SymptomSpecialization (" +
+                    "ID INTEGER PRIMARY KEY," +
+                    "SymptomID int," +
+                    "SpecializationID int," +
+                    
+                    "FOREIGN KEY (SymptomID) REFERENCES Symptom (ID) ON DELETE RESTRICT ON UPDATE RESTRICT," +
+                    "FOREIGN KEY (SpecializationID) REFERENCES Specialization (ID) ON DELETE RESTRICT ON UPDATE RESTRICT" +
+                    " )");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (1,24);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (2,14);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (3,1);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (4,1);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (5,24);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (6,24);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (7,1);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (8,38);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (9,34);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (10,1);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (11,1);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (12,1);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (13,13);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (14,20);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (15,20);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (16,45);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (17,35);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (18,35);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (19,22);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (20,59);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (21,13);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (22,45);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (23,10);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (24,45);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (25,45);");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (26,58);");
+            
         }
 
 
