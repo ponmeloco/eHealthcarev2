@@ -653,8 +653,42 @@ public class Databaseconnection {
         }
      }
 
+    public Physician[] searchPhysician(Symptom[] symptoms) throws SQLException,ClassNotFoundException{
+        if(connection == null){
+            connect();
+        }
+        int[] specializationIDs = null;
+        Physician[] physicians = null; 
+        int j = 0;
+        int k;
+        
+        Statement statement = connection.createStatement();
+        
+        for (int i = 0; i < symptoms.length; i++){
+        specializationIDs[i] = statement.executeQuery("SELECT SpecializationID FROM SymptomSpecialization WHERE SymptomID = (SELECT Symptom.ID FROM Symptom WHERE name='"+symptoms[i].getName()+"');").getInt(1);
+                }
+        if(specializationIDs != null){
+            for(int i= 0; i<specializationIDs.length; i++){
+                ResultSet res = statement.executeQuery("SELECT PhysicianID FROM SpecializationPhysician WHERE SpecializationID = "+specializationIDs[i]+";");
+                        k = 0;
 
-
+                        while (res.next()){
+                           physicians[i+j] = getPhysician(res.getInt(k));
+                           j++;
+                           k++;
+                        }
+            }
+        }else{
+            System.out.print("No Physician Found");
+            return null;
+        }
+        if(physicians == null){
+            System.out.print("No Physician Found");
+            return null;
+        }
+       return physicians;
+    }
+ 
 
     private void setSymptoms(String email,Symptom[] symptoms)throws SQLException,ClassNotFoundException{
          if (connection == null) {
@@ -1388,104 +1422,20 @@ public class Databaseconnection {
 
             System.out.println("complete.");
         }
-        private void buildRatingTable() throws SQLException{
-            System.out.println("Building Rating table...");
+        private void buildSymptomSpecializationTable() throws SQLException{
+          System.out.println("Building SymptomSpecializationTable table...");
 
             Statement state = connection.createStatement();
-            state.execute( "CREATE TABLE Rating (" +
+            state.execute( "CREATE TABLE SymptomSpecialization (" +
                     "ID INTEGER PRIMARY KEY," +
-                    "PhysicianID INT," +
-                    "PatientID INT," +
-                    "treatmentRating INT NOT NULL," +
-                    "severeMisstreatment BOOLEAN NOT NULL," +
-                    "severeMisstreatmentExplain VARCHAR(255) NOT NULL DEFAULT('No misstreatment')," +
-                    "equipment INT NOT NULL," +
-                    "explanationQuality INT NOT NULL," +
-                    "sympathy INT NOT NULL," +
-                    "timeUntilAppointment INT NOT NULL," +
-                    "timeUntilCalledOn INT NOT NULL," +
-                    "handicapFriendly INT NOT NULL," +
-                    "availabilityPhone INT NOT NULL," +
-                    "openingHours INT NOT NULL," +
-                    "individualRating VARCHAR(255) NOT NULL DEFAULT('No individual rating')," +
-                    "FOREIGN KEY (PatientID) REFERENCES User(ID) ON DELETE CASCADE ON UPDATE CASCADE," +
-                    "FOREIGN KEY (treatmentRating) REFERENCES Thumb(ID) ON DELETE RESTRICT ON UPDATE CASCADE," +
-                    "FOREIGN KEY (equipment) REFERENCES Thumb(ID) ON DELETE RESTRICT ON UPDATE CASCADE," +
-                    "FOREIGN KEY (explanationQuality) REFERENCES Thumb(ID) ON DELETE RESTRICT ON UPDATE CASCADE," +
-                    "FOREIGN KEY (sympathy) REFERENCES Thumb(ID) ON DELETE RESTRICT ON UPDATE CASCADE," +
-                    "FOREIGN KEY (timeUntilAppointment) REFERENCES Thumb(ID) ON DELETE RESTRICT ON UPDATE CASCADE," +
-                    "FOREIGN KEY (timeUntilCalledOn) REFERENCES Thumb(ID) ON DELETE RESTRICT ON UPDATE CASCADE," +
-                    "FOREIGN KEY (handicapFriendly) REFERENCES Thumb(ID) ON DELETE RESTRICT ON UPDATE CASCADE," +
-                    "FOREIGN KEY (availabilityPhone) REFERENCES Thumb(ID) ON DELETE RESTRICT ON UPDATE CASCADE," +
-                    "FOREIGN KEY (openingHours) REFERENCES Thumb(ID) ON DELETE RESTRICT ON UPDATE CASCADE," +
-                    "FOREIGN KEY (PhysicianID) REFERENCES User (UserID) ON DELETE CASCADE ON UPDATE CASCADE" +
+                    "SymptomID int," +
+                    "SpecializationID int," +
+                    
+                    "FOREIGN KEY (SymptomID) REFERENCES Symptom (ID) ON DELETE RESTRICT ON UPDATE RESTRICT," +
+                    "FOREIGN KEY (SpecializationID) REFERENCES Specialization (ID) ON DELETE RESTRICT ON UPDATE RESTRICT" +
                     " )");
-
-            System.out.println("complete.");
-        }
-        private void buildThumbTable() throws SQLException{
-            System.out.println("Building Thumb table...");
-
-            Statement state = connection.createStatement();
-            state.execute( "CREATE TABLE Thumb (" +
-                    "ID INTEGER PRIMARY KEY," +
-                    "rating VARCHAR(255) UNIQUE NOT NULL" +
-                    " )");
-
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Thumb (" +
-                    "rating)" +
-                    "VALUES (?);");
-
-            preparedStatement.setString(1, "Up");
-            preparedStatement.execute();
-            preparedStatement.setString(1, "Down");
-            preparedStatement.execute();
-            preparedStatement.setString(1, "Nothing");
-            preparedStatement.execute();
-
-            System.out.println("complete.");
-        }
-        private void buildTagTable() throws SQLException{
-            System.out.println("Building Tag table...");
-
-            Statement state = connection.createStatement();
-            state.execute( "CREATE TABLE Tag (" +
-                    "ID INTEGER PRIMARY KEY," +
-                    "name VARCHAR(255) UNIQUE NOT NULL ," +
-                    "counter NOT NULL DEFAULT(1)" +
-                    ")");
-
-            System.out.println("complete.");
-        }
-        private void buildRatingTagTable() throws SQLException{
-            System.out.println("Building RatingTag table...");
-
-            Statement state = connection.createStatement();
-            state.execute( "CREATE TABLE RatingTag (" +
-                    "ID INTEGER PRIMARY KEY," +
-                    "RatingID INT NOT NULL," +
-                    "TagID INT NOT NULL," +
-                    "FOREIGN KEY (RatingID) REFERENCES Rating(ID) ON DELETE CASCADE ON UPDATE CASCADE," +
-                    "FOREIGN KEY (TagID) REFERENCES Tag(ID) ON DELETE CASCADE ON UPDATE CASCADE" +
-                    " )");
-
-            System.out.println("complete.");
-        }
-        private void buildTransferOrderTable() throws SQLException{
-            System.out.println("Building Transferorder table...");
-
-            Statement state = connection.createStatement();
-            state.execute( "CREATE TABLE Transferorder (" +
-                    "ID INTEGER PRIMARY KEY," +
-                    "PatientID INT NOT NULL," +
-                    "PhysicianID INT NOT NULL," +
-                    "SpecializationID INT NOT NULL," +
-                    "FOREIGN KEY (PatientID) REFERENCES Patient(ID) ON DELETE CASCADE ON UPDATE CASCADE," +
-                    "FOREIGN KEY (PhysicianID) REFERENCES Physician(ID) ON DELETE CASCADE ON UPDATE CASCADE," +
-                    "FOREIGN KEY (SpecializationID) REFERENCES Specialization(ID) ON DELETE CASCADE ON UPDATE CASCADE" +
-                    " )");
-
-            System.out.println("complete.");
+            state.execute("INSERT INTO SymptomSpecialization(" +
+                    "SymptomID,SpecializationID) VALUES (1,1);");  
         }
 
 
